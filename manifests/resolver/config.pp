@@ -6,6 +6,21 @@ class pdns::resolver::config (
   $reverse_domain = undef,
   $nameservers    = $::ipaddress
 ) {
+  case $::osfamily {
+    RedHat: {
+      $recursor_conf = '/etc/pdns-recursor/recursor.conf'
+      $forward_zones_file = '/etc/pdns-recursor/forward_zones'
+      $user = 'pdns-recursor'
+      $group = 'pdns-recursor'
+    }
+    Debian: {
+      $recursor_conf = '/etc/powerdns/recursor.conf'
+      $forward_zones_file = '/etc/powerdns/forward_zones'
+      $user = 'pdns'
+      $group = 'pdns'
+    }
+  }
+
   if $forward_domain {
     # By default the pdns recursor will not send queries to local addresses
     # but if we are running a local domain then we need to change this to
@@ -51,17 +66,17 @@ class pdns::resolver::config (
 
   # defaults
   File {
-    owner => 'pdns-recursor',
-    group => 'pdns-recursor',
+    owner => $user,
+    group => $group,
   }
-  file { '/etc/pdns-recursor/recursor.conf':
+  file { $recursor_conf:
     ensure  => present,
     mode    => '0444',
     content => template('pdns/resolver/recursor.conf.erb'),
     require => Package['pdns-recursor'],
     notify  => Class['pdns::resolver::service'],
   }
-  file { '/etc/pdns-recursor/forward_zones':
+  file { $forward_zones_file:
     ensure  => present,
     mode    => '0444',
     content => template('pdns/resolver/forward_zones.erb'),
