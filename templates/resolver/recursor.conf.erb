@@ -5,3 +5,7 @@ local-address=<%= scope.lookupvar("pdns::resolver::config::listen_address") %>
 dont-query=<%= scope.lookupvar("pdns::resolver::config::_dont_query") %>
 <% end -%>
 forward-zones-file=<%= scope.lookupvar("pdns::resolver::config::forward_zones_file") %>
+
+<% additional_config.each do |key, value| -%>
+<%= key %>=<%= value %>
+<% end -%>

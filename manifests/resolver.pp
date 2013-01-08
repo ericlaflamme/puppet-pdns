@@ -14,6 +14,7 @@ class pdns::resolver(
   $forward_domain = undef,
   $reverse_domain = undef,
   $nameservers    = $::ipaddress,
+  $additional_config = {},
   $use_hiera      = true
 ) {
   # Only run on RedHat derived systems.
@@ -54,6 +55,10 @@ class pdns::resolver(
             undef   => $nameservers,
             default => $resolver['nameservers'],
           },
+          additional_config => $resolver['additional_config'] ? {
+            undef   => $additional_config,
+            default => $resolver['additional_config'],
+          },
         }
         include pdns::resolver::install
         include pdns::resolver::service
@@ -68,6 +73,7 @@ class pdns::resolver(
       forward_domain => $forward_domain,
       reverse_domain => $reverse_domain,
       nameservers    => $nameservers,
+      additional_config => $additional_config,
     }
     include pdns::resolver::install
     include pdns::resolver::service

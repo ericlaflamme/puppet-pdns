@@ -6,6 +6,7 @@ class pdns::nameserver::config (
   $backend_password = undef,
   $backend_dbname = undef,
   $listen_address = $::ipaddress,
+  $additional_config = {},
   $forward_domain = undef,
   $reverse_domain = undef
 ) {

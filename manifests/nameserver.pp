@@ -15,6 +15,7 @@ class pdns::nameserver(
   $backend_user   = undef,
   $backend_password = undef,
   $backend_dbname = undef,
+  $additional_config = {},
   $forward_domain = undef,
   $reverse_domain = undef,
   $use_hiera      = true
@@ -61,6 +62,10 @@ class pdns::nameserver(
             undef   => $listen_address,
             default => $nameserver['listen_address'],
           },
+          additional_config => $nameserver['additional_config'] ? {
+            undef   => $additional_config,
+            default => $nameserver['additional_config'],
+          },
           forward_domain => $nameserver['forward_domain'] ? {
             undef   => $forward_domain,
             default => $nameserver['forward_domain'],
@@ -89,6 +94,7 @@ class pdns::nameserver(
       backend_password  => $backend_password,
       backend_dbname => $backend_dbname,
       listen_address => $listen_address,
+      additional_config => $additional_config,
       forward_domain => $forward_domain,
       reverse_domain => $reverse_domain,
     }

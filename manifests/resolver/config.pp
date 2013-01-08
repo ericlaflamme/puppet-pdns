@@ -4,7 +4,8 @@ class pdns::resolver::config (
   $forward_zones  = [],
   $forward_domain = undef,
   $reverse_domain = undef,
-  $nameservers    = $::ipaddress
+  $nameservers    = $::ipaddress,
+  $additional_config = {}
 ) {
   case $::osfamily {
     RedHat: {
