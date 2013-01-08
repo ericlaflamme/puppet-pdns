@@ -4,6 +4,25 @@ class pdns::nameserver::config (
   $forward_domain = undef,
   $reverse_domain = undef
 ) {
+  case $::osfamily {
+    RedHat: {
+      $pdns_package = 'pdns-server'
+      $pdns_conf = '/etc/pdns/pdns.conf'
+      $user = 'pdns'
+      $group = 'pdns'
+    }
+    Debian: {
+      $pdns_package = 'pdns-server'
+      $pdns_conf = '/etc/powerdns/pdns.conf'
+      $user = 'pdns'
+      $group = 'pdns'
+    }
+    default: {
+      fail('This module currently only supports RedHat- and',
+            'Debian-based systems')
+    }
+  }
+
   if $backend == undef {
     fail('pdns::nameserver::config backend parameter is required')
   }
@@ -32,14 +51,14 @@ class pdns::nameserver::config (
 
   # defaults
   File {
-    owner => 'pdns',
-    group => 'pdns',
+    owner => $user,
+    group => $group,
   }
-  file { '/etc/pdns/pdns.conf':
+  file { $pdns_conf:
     ensure  => present,
     mode    => '0400',
     content => template('pdns/nameserver/pdns.conf.erb'),
-    require => Package['pdns'],
+    require => Package[$pdns_package],
     notify  => Class['pdns::nameserver::service'],
   }
 }

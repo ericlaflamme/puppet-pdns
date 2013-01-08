@@ -17,8 +17,9 @@ class pdns::nameserver(
   # Only run on RedHat derived systems.
   case $::osfamily {
     RedHat: { }
+    Debian: { }
     default: {
-      fail('This module currently only supports RedHat-based systems')
+      fail('This module currently only supports RedHat- and Debian-based systems')
     }
   }
   if $use_hiera {
