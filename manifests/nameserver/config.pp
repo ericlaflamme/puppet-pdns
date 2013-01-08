@@ -1,5 +1,10 @@
 class pdns::nameserver::config (
   $backend        = 'sqlite',
+  $backend_host   = undef,
+  $backend_port   = undef,
+  $backend_user   = undef,
+  $backend_password = undef,
+  $backend_dbname = undef,
   $listen_address = $::ipaddress,
   $forward_domain = undef,
   $reverse_domain = undef
@@ -10,12 +15,24 @@ class pdns::nameserver::config (
       $pdns_conf = '/etc/pdns/pdns.conf'
       $user = 'pdns'
       $group = 'pdns'
+      if $backend_dbname and $backend == 'sqlite' {
+        $sqlite_file = $backend_dbname
+      }
+      else {
+        $sqlite_file = '/var/pdns/powerdns.sqlite'
+      }
     }
     Debian: {
       $pdns_package = 'pdns-server'
       $pdns_conf = '/etc/powerdns/pdns.conf'
       $user = 'pdns'
       $group = 'pdns'
+      if $backend_dbname and $backend == 'sqlite' {
+        $sqlite_file = $backend_dbname
+      }
+      else {
+        $sqlite_file = '/var/lib/powerdns/pdns.sqlite3'
+      }
     }
     default: {
       fail('This module currently only supports RedHat- and',

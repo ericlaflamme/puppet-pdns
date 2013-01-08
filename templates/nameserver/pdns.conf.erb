@@ -1,13 +1,26 @@
-setuid=pdns
-setgid=pdns
+setuid=<%= scope.lookupvar('pdns::nameserver::config::user') %>
+setgid=<%= scope.lookupvar('pdns::nameserver::config::group') %>
 local-address=<%= scope.lookupvar('pdns::nameserver::config::listen_address') %>
 <% if scope.lookupvar('pdns::nameserver::config::backend') == 'postgresql' -%>
 launch=gpgsql
-gpgsql-user=pdns
-gpgsql-dbname=powerdns
+<% if scope.lookupvar('pdns::nameserver::config::backend_host') != :undef -%>
+gpgsql-host=<%= scope.lookupvar('pdns::nameserver::config::backend_host') %>
+<% end -%>
+<% if scope.lookupvar('pdns::nameserver::config::backend_port') != :undef -%>
+gpgsql-port=<%= scope.lookupvar('pdns::nameserver::config::backend_port') %>
+<% end -%>
+<% if scope.lookupvar('pdns::nameserver::config::backend_user') != :undef -%>
+gpgsql-user=<%= scope.lookupvar('pdns::nameserver::config::backend_user') %>
+<% end -%>
+<% if scope.lookupvar('pdns::nameserver::config::backend_password') != :undef -%>
+gpgsql-password=<%= scope.lookupvar('pdns::nameserver::config::backend_password') %>
+<% end -%>
+<% if scope.lookupvar('pdns::nameserver::config::backend_dbname') != :undef -%>
+gpgsql-dbname=<%= scope.lookupvar('pdns::nameserver::config::backend_dbname') %>
+<% end -%>
 <% elsif scope.lookupvar('pdns::nameserver::config::backend') == 'sqlite' -%>
 launch=gsqlite3
-gsqlite3-database=/var/pdns/powerdns.sqlite
+gsqlite3-database=<%= scope.lookupvar('pdns::nameserver::config::sqlite_file') %>
 <% else -%>
 # Something went wrong. No backend specified!
 <% end -%>

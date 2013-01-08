@@ -10,6 +10,11 @@
 class pdns::nameserver(
   $listen_address = $::ipaddress,
   $backend        = 'sqlite',
+  $backend_host   = undef,
+  $backend_port   = undef,
+  $backend_user   = undef,
+  $backend_password = undef,
+  $backend_dbname = undef,
   $forward_domain = undef,
   $reverse_domain = undef,
   $use_hiera      = true
@@ -31,6 +36,26 @@ class pdns::nameserver(
           backend => $nameserver['backend'] ? {
             undef   => $backend,
             default => $nameserver['backend'],
+          },
+          backend_host => $nameserver['backend_host'] ? {
+            undef   => $backend_host,
+            default => $nameserver['backend_host'],
+          },
+          backend_port => $nameserver['backend_port'] ? {
+            undef   => $backend_port,
+            default => $nameserver['backend_port'],
+          },
+          backend_user => $nameserver['backend_user'] ? {
+            undef   => $backend_user,
+            default => $nameserver['backend_user'],
+          },
+          backend_password => $nameserver['backend_password'] ? {
+            undef   => $backend_password,
+            default => $nameserver['backend_password'],
+          },
+          backend_dbname => $nameserver['backend_dbname'] ? {
+            undef   => $backend_dbname,
+            default => $nameserver['backend_dbname'],
           },
           listen_address => $nameserver['listen_address'] ? {
             undef   => $listen_address,
@@ -58,6 +83,11 @@ class pdns::nameserver(
   else {
     class { 'pdns::nameserver::config':
       backend        => $backend,
+      backend_host   => $backend_host,
+      backend_port   => $backend_port,
+      backend_user   => $backend_user,
+      backend_password  => $backend_password,
+      backend_dbname => $backend_dbname,
       listen_address => $listen_address,
       forward_domain => $forward_domain,
       reverse_domain => $reverse_domain,
