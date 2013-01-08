@@ -47,6 +47,12 @@ class pdns::nameserver::config (
     fail('pdns::nameserver::config listen_address parameter is required')
   }
 
+  case $backend {
+    postgresql: { $backend_module = 'gpgsql' }
+    mysql:      { $backend_module = 'gmysql' }
+    sqlite:     { $backend_module = 'gsqlite3' }
+  }
+
   # Set the reverse domain based on the current IP address
   if $reverse_domain {
     $reverse = $reverse_domain

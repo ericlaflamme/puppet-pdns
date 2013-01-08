@@ -2,7 +2,7 @@
 #
 # Installs and configures a PowerDNS nameserver - www.powerdns.com
 #
-# Currently supported backends: sqlite, postgresql
+# Currently supported backends: sqlite, postgresql, mysql
 #
 # Currently only supported on RedHat-based systems
 #

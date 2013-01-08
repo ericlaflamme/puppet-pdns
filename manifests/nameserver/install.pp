@@ -34,13 +34,18 @@ class pdns::nameserver::install (
         package { $pdns_pgsql_package: ensure => installed }
       }
     }
+    'mysql': {
+      if ! defined(Package[$pdns_mysql_package]) {
+        package { $pdns_mysql_package: ensure => installed }
+      }
+    }
     'sqlite': {
       if ! defined(Package[$pdns_sqlite3_package]) {
         package { $pdns_sqlite3_package: ensure => installed }
       }
     }
     default: {
-      fail("unknown backend - valid values are 'postgresql' or 'sqlite'")
+      fail("unknown backend - valid values are 'postgresql', 'mysql' or 'sqlite'")
     }
   }
 }
